@@ -15,10 +15,9 @@ public class Client {
     private double departureTime;//tempo de saída
     private double waitingTime;//tempo de espera
 
-    public Client(double arrivalTime, double serviceTime, double departureTime) {
+    public Client(double arrivalTime, double serviceTime) {
         this.arrivalTime = arrivalTime;
         this.serviceTime = serviceTime;
-        this.departureTime = departureTime;
     }
 
     public double getArrivalTime() {

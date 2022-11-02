@@ -11,9 +11,11 @@ package classes;
  */
 public class Timer {
     public double currentTime;
+    public double totalSimulationTime;
 
-    public Timer() {
+    public Timer(double totalSimulationTime) {
         this.currentTime = 0;
+        this.totalSimulationTime = totalSimulationTime;
     }
     
     public void incrementTime(double time){

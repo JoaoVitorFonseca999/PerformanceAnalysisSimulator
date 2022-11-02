@@ -19,5 +19,23 @@ public class SimData {
         this.avgServiceTime = avgServiceTime;
         this.totalSimulationTime = totalSimulationTime;
     }
-    
+
+    public double getAvgArrivalTime() {
+        return avgArrivalTime;
+    }
+    public void setAvgArrivalTime(double avgArrivalTime) {
+        this.avgArrivalTime = avgArrivalTime;
+    }
+    public double getAvgServiceTime() {
+        return avgServiceTime;
+    }
+    public void setAvgServiceTime(double avgServiceTime) {
+        this.avgServiceTime = avgServiceTime;
+    }
+    public double getTotalSimulationTime() {
+        return totalSimulationTime;
+    }
+    public void setTotalSimulationTime(double totalSimulationTime) {
+        this.totalSimulationTime = totalSimulationTime;
+    }
 }

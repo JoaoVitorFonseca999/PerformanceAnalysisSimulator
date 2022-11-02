@@ -12,7 +12,7 @@ public class RandomGenerator {
         //Exponencial distribution
         Random rand = new Random();
         //random between 0 and 1
-        double random = rand.nextDouble();
-        return (-1.0/(1.0/avg))* Math.log(1.0-random);
+        double u = rand.nextDouble();
+        return (-1.0/(1.0/avg))* Math.log(1.0-u);
     }
 }

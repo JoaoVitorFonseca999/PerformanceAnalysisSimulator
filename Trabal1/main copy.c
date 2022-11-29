@@ -26,16 +26,7 @@ typedef struct AnaliseIntervalo{
   double lambda;
   double erroL;
   double ocupacao;
-
 } AnaliseIntervalo;
-
-//Função que transforma uma AnaliseIntervalo em uma string
-char* AnaliseIntervaloToString(AnaliseIntervalo analise){
-  char* string = (char*) malloc(sizeof(char)*100);
-  sprintf(string, "%d\t%lf\t%lf\t%lf\t%.20lf\t%.20lf\n", analise.index, analise.eN, analise.eW, analise.lambda, analise.erroL, analise.ocupacao);
-  return string;
-}
-
 
 //Funcao criada para o trabalho com base no código do professor
 AnaliseIntervalo CalcL( little e_n, little e_w_chegada, little e_w_saida, int tempo, double soma_tempo_servico, int index){
@@ -74,7 +65,7 @@ AnaliseIntervalo CalcL( little e_n, little e_w_chegada, little e_w_saida, int te
     analise.eN = e_n_final;
     analise.eW = e_w_final;
     analise.lambda = lambda;
-    analise.erroL = fabs(e_n_final - lambda * e_w_final);
+    analise.erroL = e_n_final - lambda * e_w_final;
     analise.ocupacao = soma_tempo_servico/tempo_decorrido;
     return analise;
 }
@@ -237,32 +228,13 @@ int main(){
     printf("Max fila: %ld.\n", max_fila);
 
 
-
-    //Abrir arquivo para salvar os dados
-    FILE *arq;
-    arq = fopen("dados.txt", "w");
-
-    //Escrever no arquivo
-    for(int i=1; i<index; i++){
-        //escreve no arquivo
-        fprintf(arq, "%s", AnaliseIntervaloToString(analises[i-1]));
-    }
-
-    //Fechar arquivo
-    fclose(arq);
-
-
-
-
-
     //Exibindo os resultados
     for(int i=1; i<index; i++){
       printf("Intervalo %d: \n", i);
       printf("E[N]: %lF\n", analises[i-1].eN);
       printf("E[W]: %lF\n", analises[i-1].eW);
-      printf("lambda: %lF\n", analises[i-1].lambda);
+      printf("lambda: %lF\n\n", analises[i-1].lambda);
       printf("Erro de Little: %.20lF\n\n", fabs(analises[i-1].eN - analises[i-1].lambda * analises[i-1].eW));
-      printf("Ocupacao: %lF.\n", analises[i-1].ocupacao);
     }
 
     return 0;

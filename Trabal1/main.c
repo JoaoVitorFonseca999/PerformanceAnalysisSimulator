@@ -78,6 +78,7 @@ AnaliseIntervalo CalcL(little e_n, little e_w_chegada, little e_w_saida, int tem
         (e_w_chegada.soma_areas - e_w_saida.soma_areas) / e_w_chegada.no_eventos;
     double lambda = e_w_chegada.no_eventos / tempo_decorrido;
 
+    /*
     printf("E[N]: %lF\n", e_n_final);
     printf("E[W]: %lF\n", e_w_final);
     printf("lambda: %lF\n\n", lambda);
@@ -85,7 +86,7 @@ AnaliseIntervalo CalcL(little e_n, little e_w_chegada, little e_w_saida, int tem
     printf("Erro de Little: %.20lF\n\n", e_n_final - lambda * e_w_final);
 
     printf("Ocupacao: %lF.\n", soma_tempo_servico / tempo_decorrido);
-
+    */
     AnaliseIntervalo analise;
     analise.index = index;
     analise.eN = e_n_final;
@@ -258,12 +259,20 @@ int main()
         (e_w_chegada.soma_areas - e_w_saida.soma_areas) / e_w_chegada.no_eventos;
     double lambda = e_w_chegada.no_eventos / tempo_decorrido;
 
+     // Exibindo os resultados 
+    printf("Index\tE[N]\t\tE[W]\t\tLambda\t\tErro de Little\t\tOcupacao do sistema\n");
+    for (int i = 1; i < index; i++)
+    {
+       
+        printf("%s", AnaliseIntervaloToString(analises[i - 1]));
+    }
+
+    
+    printf("\n\nDados finais da simulacao:\n");
     printf("E[N]: %lF\n", e_n_final);
     printf("E[W]: %lF\n", e_w_final);
-    printf("lambda: %lF\n\n", lambda);
-
-    printf("Erro de Little: %.20lF\n\n", e_n_final - lambda * e_w_final);
-
+    printf("lambda: %lF\n", lambda);
+    printf("Erro de Little: %.20lF\n", e_n_final - lambda * e_w_final);
     printf("Ocupacao: %lF.\n", soma_tempo_servico / maximo(tempo_decorrido, servico));
     printf("Max fila: %ld.\n", max_fila);
 
@@ -281,17 +290,7 @@ int main()
     // Fechar arquivo
     fclose(arq);
 
-    // Exibindo os resultados
-    for (int i = 1; i < index; i++)
-    {
-        printf("Intervalo %d: \n", i);
-        printf("E[N]: %lF\n", analises[i - 1].eN);
-        printf("E[W]: %lF\n", analises[i - 1].eW);
-        printf("lambda: %lF\n", analises[i - 1].lambda);
-        printf("Erro de Little: %.20lF\n\n", fabs(analises[i - 1].eN - analises[i - 1].lambda * analises[i - 1].eW));
-        printf("Ocupacao: %lF.\n", analises[i - 1].ocupacao);
-    }
-
+   
     return 0;
 }
 

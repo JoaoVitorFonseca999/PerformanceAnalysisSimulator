@@ -122,6 +122,10 @@ void inicia_little(little *l)
     l->soma_areas = 0.0;
 }
 
+void geraPacote(){
+    
+}
+
 int main()
 {
     // Vetor de análise de intervalos
@@ -262,7 +266,25 @@ int main()
 
             if (fila)
             {
-                servico = tempo_decorrido + (-1.0 / (1.0 / tempo_medio_servico)) * log(aleatorio());
+                double pacote;
+                int rn = (rand() % 10); // gera um número aleatório entre 0 e 9
+                //50% de chance de ser um pacote de 550 Bytes
+                if (rn < 5)
+                {
+                    pacote = 550;
+                }
+                //40% de chance de ser um pacote de 40 Bytes
+                else if (rn < 9)
+                {
+                    pacote = 40;
+                }
+                //10% de chance de ser um pacote de 1500 Bytes
+                else
+                {
+                    pacote = 1500;
+                }
+            
+                servico = tempo_decorrido + pacote / largura_link;
                 soma_tempo_servico += servico - tempo_decorrido;
             }
 

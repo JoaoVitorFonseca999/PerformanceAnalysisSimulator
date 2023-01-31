@@ -219,14 +219,14 @@ int main()
             if (!fila)
             {
                 double pacote;
-                int rand = rand() % 10; // gera um número aleatório entre 0 e 9
+                int rn = (rand() % 10); // gera um número aleatório entre 0 e 9
                 //50% de chance de ser um pacote de 550 Bytes
-                if (rand < 5)
+                if (rn < 5)
                 {
                     pacote = 550;
                 }
                 //40% de chance de ser um pacote de 40 Bytes
-                else if (rand < 9)
+                else if (rn < 9)
                 {
                     pacote = 40;
                 }

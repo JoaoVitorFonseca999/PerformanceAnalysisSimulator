@@ -15,6 +15,11 @@
 #include <math.h>
 #include <time.h>
 
+// contador tipos de pacotes
+int pacotes550 = 0;
+int pacotes40 = 0;
+int pacotes1500 = 0;
+
 typedef struct little_
 {
     unsigned long int no_eventos;
@@ -48,7 +53,7 @@ typedef struct AnaliseIntervalo
 char *AnaliseIntervaloToString(AnaliseIntervalo analise)
 {
     char *string = (char *)malloc(sizeof(char) * 100);
-    sprintf(string, "%d\t%lf\t%lf\t%lf\t%.20lf\t%.20lf\n", analise.index, analise.eN, analise.eW, analise.lambda, analise.erroL, analise.ocupacao);
+    sprintf(string, "%d\t%lf\t%lf\t%lf\t%.20lf\t%.20lf\n", analise.index, analise.eN, analise.eW, analise.lambda, fabs(analise.erroL), analise.ocupacao);
     return string;
 }
 
@@ -122,21 +127,25 @@ void inicia_little(little *l)
     l->soma_areas = 0.0;
 }
 
-double geraPacote(){
+double geraPacote()
+{
     int rn = (rand() % 10); // gera um número aleatório entre 0 e 9
-    //50% de chance de ser um pacote de 550 Bytes
+    // 50% de chance de ser um pacote de 550 Bytes
     if (rn < 5) // 0, 1, 2, 3, 4 = 50%
     {
+        pacotes550++;
         return 550;
     }
-    //40% de chance de ser um pacote de 40 Bytes
+    // 40% de chance de ser um pacote de 40 Bytes
     else if (rn < 9) // 5, 6, 7, 8 = 40%
     {
+        pacotes40++;
         return 40;
     }
-    //10% de chance de ser um pacote de 1500 Bytes
+    // 10% de chance de ser um pacote de 1500 Bytes
     else
     {
+        pacotes1500++;
         return 1500; // 9 = 10%
     }
 }
@@ -152,8 +161,8 @@ int main()
     double intervalo_medio_chegada;
     double tempo_medio_servico;
 
-    //trabalho2
-    //largura link da rede
+    // trabalho2
+    // largura link da rede
     double largura_link;
 
     double chegada;
@@ -163,6 +172,8 @@ int main()
 
     unsigned long int fila = 0;
     unsigned long int max_fila = 0;
+
+
 
     /**
     Little
@@ -203,11 +214,8 @@ int main()
     // printf("Informe o tempo medio de servico (segundos): ");
     // scanf("%lF", &tempo_medio_servico);
 
-    printf("Informe a largura do link (Bytes): ");
+    printf("Informe a largura do link (Bytes/segundo): ");
     scanf("%lF", &largura_link);
-    
-    
-
 
     // gerando o tempo de chegada da primeira requisicao.
     chegada = (-1.0 / (1.0 / intervalo_medio_chegada)) * log(aleatorio());
@@ -237,25 +245,7 @@ int main()
             // printf("Chegada em %lF.\n", tempo_decorrido);
             if (!fila)
             {
-                double pacote;
-                int rn = (rand() % 10); // gera um número aleatório entre 0 e 9
-                //50% de chance de ser um pacote de 550 Bytes
-                if (rn < 5)
-                {
-                    pacote = 550;
-                }
-                //40% de chance de ser um pacote de 40 Bytes
-                else if (rn < 9)
-                {
-                    pacote = 40;
-                }
-                //10% de chance de ser um pacote de 1500 Bytes
-                else
-                {
-                    pacote = 1500;
-                }
-                
-                servico = tempo_decorrido+ geraPacote() / largura_link;
+                servico = tempo_decorrido + geraPacote() / largura_link;
                 soma_tempo_servico += servico - tempo_decorrido;
             }
             fila++;
@@ -306,23 +296,29 @@ int main()
         (e_w_chegada.soma_areas - e_w_saida.soma_areas) / e_w_chegada.no_eventos;
     double lambda = e_w_chegada.no_eventos / tempo_decorrido;
 
-     // Exibindo os resultados 
+    // Exibindo os resultados
     printf("Index\tE[N]\t\tE[W]\t\tLambda\t\tErro de Little\t\tOcupacao do sistema\n");
     for (int i = 1; i < index; i++)
     {
-       
+
         printf("%s", AnaliseIntervaloToString(analises[i - 1]));
     }
 
-    
-    printf("\n\nDados finais da simulacao:\n");
+    printf("\n\nDados FINAIS da simulacao:\n");
     printf("E[N]: %lF\n", e_n_final);
     printf("E[W]: %lF\n", e_w_final);
     printf("lambda: %lF\n", lambda);
-    printf("Erro de Little: %.20lF\n", e_n_final - lambda * e_w_final);
+    printf("Erro de Little: %.20lF\n", fabs(e_n_final - lambda * e_w_final));
     printf("Ocupacao: %lF.\n", soma_tempo_servico / maximo(tempo_decorrido, servico));
     printf("Max fila: %ld.\n", max_fila);
-
+    printf("Tempo decorrido: %.2lF.\n", tempo_decorrido);
+    printf("\n\n");
+    printf("Pacotes gerados:\n");
+    printf("550 Bytes: %d, %.2f porcento", pacotes550, (double)(pacotes550 * 100) / (double)(pacotes1500 + pacotes550 + pacotes40));
+    printf("\n1500 Bytes: %d, %.2f porcento", pacotes1500, (double)(pacotes1500 * 100) / (double)(pacotes1500 + pacotes550 + pacotes40));
+    printf("\n40 Bytes: %d, %.2f porcento", pacotes40, (double)(pacotes40 * 100) / (double)(pacotes1500 + pacotes550 + pacotes40));
+    printf("\nTotal: %d", pacotes1500 + pacotes550 + pacotes40);
+    printf("\n\n");
     // Abrir arquivo para salvar os dados
     FILE *arq;
     arq = fopen("dados.txt", "w");
@@ -337,14 +333,10 @@ int main()
     // Fechar arquivo
     fclose(arq);
 
-   
     return 0;
 }
 
 // Compilar
 // gcc -o main main.c -lm
 // Executar
-// ./main 
-
-
-
+// ./main

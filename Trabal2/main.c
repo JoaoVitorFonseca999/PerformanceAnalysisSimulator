@@ -122,8 +122,23 @@ void inicia_little(little *l)
     l->soma_areas = 0.0;
 }
 
-void geraPacote(){
-    
+double geraPacote(){
+    int rn = (rand() % 10); // gera um número aleatório entre 0 e 9
+    //50% de chance de ser um pacote de 550 Bytes
+    if (rn < 5) // 0, 1, 2, 3, 4 = 50%
+    {
+        return 550;
+    }
+    //40% de chance de ser um pacote de 40 Bytes
+    else if (rn < 9) // 5, 6, 7, 8 = 40%
+    {
+        return 40;
+    }
+    //10% de chance de ser um pacote de 1500 Bytes
+    else
+    {
+        return 1500; // 9 = 10%
+    }
 }
 
 int main()
@@ -240,7 +255,7 @@ int main()
                     pacote = 1500;
                 }
                 
-                servico = tempo_decorrido + pacote / largura_link;
+                servico = tempo_decorrido+ geraPacote() / largura_link;
                 soma_tempo_servico += servico - tempo_decorrido;
             }
             fila++;

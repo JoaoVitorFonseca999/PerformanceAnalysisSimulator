@@ -52,8 +52,10 @@ typedef struct AnaliseIntervalo
 // Função que transforma uma "AnaliseIntervalo" em uma string
 char *AnaliseIntervaloToString(AnaliseIntervalo analise)
 {
+    double auxLambda = analise.lambda;
+    auxLambda = auxLambda>1?1:auxLambda;
     char *string = (char *)malloc(sizeof(char) * 100);
-    sprintf(string, "%d\t%lf\t%lf\t%lf\t%.20lf\t%.20lf\n", analise.index, analise.eN, analise.eW, analise.lambda, fabs(analise.erroL), analise.ocupacao);
+    sprintf(string, "%d\t%lf\t%lf\t%lf\t%.20lf\t%.20lf\n", analise.index, analise.eN, analise.eW, auxLambda, fabs(analise.erroL), analise.ocupacao);
     return string;
 }
 
